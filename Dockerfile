@@ -1,17 +1,16 @@
 # Stage 1: Compile and Build angular codebase
 FROM node:latest as build
 WORKDIR /app
-COPY --chown=node:node package*.json ./
+COPY package*.json ./
 RUN npm ci
 RUN npm install -g @angular/cli
-COPY --chown=node:node . .
-RUN npm run build --configuration=production
+COPY . .
+RUN npm run build
 
 # Stage 2: Serve app with nginx server
 FROM nginx:latest
-COPY --chown=node:node ./nginx.conf /etc/nginx/conf.d/defaut.conf
-COPY --chown=node:node --from=build /app/dist/StudentDashboard/browser /usr/share/nginx/html
-# Expose port 80
+COPY ./nginx.conf /etc/nginx/conf.d/defaut.conf
+COPY --from=build /app/dist/student-dashboard /usr/share/nginx/html
 EXPOSE 80
 
 
