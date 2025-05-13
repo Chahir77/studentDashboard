@@ -1,41 +1,40 @@
-FROM node:gallium-alpine3.18 as build
-WORKDIR /app
-COPY package.json .
-COPY package-lock.json .
-RUN npm install
-COPY . .
-RUN npm run build
+#FROM node:gallium-alpine3.18 as build
+#WORKDIR /app
+#COPY package.json .
+#COPY package-lock.json .
+#RUN npm install
+#COPY . .
+#RUN npm run build
 #RUN npm run install-all
 
 # Stage 2
-FROM nginx
-WORKDIR /usr/share/nginx/html
-RUN rm -rf ./*
-RUN echo ${PWD} && ls -la
-COPY --from=build /app/build .
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
-
+#FROM nginx
+#WORKDIR /usr/share/nginx/html
+#RUN rm -rf ./*
+#RUN echo ${PWD} && ls -la
+#COPY --from=build /app/build .
+#ENTRYPOINT ["nginx", "-g", "daemon off;"]
 
 
 
 # Stage 1: Compile and Build angular codebase
 # Use official node image as the base image
-#FROM node:latest as build
+FROM node:latest as build
 # Set the working directory
-#WORKDIR /usr/local/app
+WORKDIR /usr/local/app
 # Add the source code to app
-#COPY ./ /usr/local/app/
+COPY ./ /usr/local/app/
 # Install all the dependencies
-#RUN npm install
+RUN npm install
 # Generate the build of the application
-#RUN npm run build
+RUN npm run build
 # Stage 2: Serve app with nginx server
 # Use official nginx image as the base image
-#FROM nginx:latest
+FROM nginx:latest
 # Copy the build output to replace the default nginx contents.
-#COPY --from=build /usr/local/app/dist/StudentDashboard /usr/share/nginx/html
+COPY --from=build /usr/local/app/dist/StudentDashboard /usr/share/nginx/html
 # Expose port 80
-#EXPOSE 80
+EXPOSE 80
 
 
 ### STAGE 1: Build ###
