@@ -10,7 +10,7 @@ RUN npm run build --configuration=production
 # Stage 2: Serve app with nginx server
 FROM nginx:latest
 COPY ./nginx.conf /etc/nginx/conf.d/defaut.conf
-COPY --from=build /app/dist/StudentDashboard/browser /usr/share/nginx/html
+COPY --from=build /app/dist/studentdashboard/browser /usr/share/nginx/html
 # Expose port 80
 EXPOSE 80
 
