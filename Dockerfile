@@ -4,7 +4,8 @@ COPY package.json .
 COPY package-lock.json .
 RUN npm install
 COPY . .
-RUN npm run install-all
+RUN npm run build
+#RUN npm run install-all
 
 # Stage 2
 FROM nginx
